@@ -3,6 +3,9 @@
 ## Introduction
 t.b.a
 
+## Installation
+t.b.a
+
 ## Data Preprocessing
 
 #### Data acquisition
@@ -26,9 +29,7 @@ Library dependencies are liblas, and scipy.
 https://liblas.org/tutorial/python
 The LiDAR data can be gridded using "gridding_and_aggregation.py", by specifying the correct data source and output directory.
 ~~~~
-#Path to LAZ data, HAG has been extracted from original Z.
 DATA_SOURCE_FOLDER = '../dataset/follo-2014/' 
-#Path to NPZ data, gridding is done.
 DATA_READY_DIRECTORY = '../dataset/follo-2014-gridded/'
 ~~~~
 ~~~~
@@ -55,9 +56,6 @@ In order to speed up the training, we rely on tensorflow-tfrecords reader to do 
 ~~~~
 python npy_to_tfrecords.py 
 ~~~~
-
-## Installation
-t.b.a
 
 ## Training
 t.b.a
