@@ -15,23 +15,10 @@ import itertools
 import os
 import sys
 
-
-if( sys.version_info[0] < (3) ):
-    import pynvml 
-else:
-    import py3nvml.py3nvml as pynvml
-
 from decimal import Decimal 
 import scipy
-from mlxtend.preprocessing import one_hot
 
 import matplotlib.pyplot as plt
-
-
-if( sys.version_info[0] < (3) ):
-    import pydensecrf.densecrf as dcrf
-    from pydensecrf.utils import compute_unary, create_pairwise_bilateral, \
-        create_pairwise_gaussian, unary_from_softmax
 
 
 import multiprocessing as mp
@@ -60,43 +47,19 @@ label_colours = [
                     (204, 255, 255)  # Ocean
                 ]
 
+NP_IMG_MEAN = np.array((9.99826660e+01, 2.84542298e+00, 4.99998426e+00, 9.92170525e+00, 3.45799414e+03, 7.21275391e+03, 5.46825439e+03), dtype=np.float32)
+NP_IMG_STD = np.array((2.16842316e+02, 4.49925566e+00, 6.98652077e+00, 7.38163376e+01, 1.80675605e+04, 1.69218164e+04, 1.79818984e+04), dtype=np.float32)
+NP_IMG_AMAX = np.array((32653. , 316.04998779, 477.17999268, 66026.1484375 , 32512. , 32512. , 32512.), dtype=np.float32)
+NP_IMG_AMIN = np.array((-31528. , -218.47999573, 0. , 0. , -32768. , -32768. , -32768.), dtype=np.float32)
+
+
+def get_data_stats():
+    return NP_IMG_MEAN, NP_IMG_STD, NP_IMG_AMAX, NP_IMG_AMIN
 
 def create_dir(_dir_numpy):
     if not os.path.exists(_dir_numpy):
         os.makedirs(_dir_numpy)
 
-
-
-def isGPUAvailable(gpuIDX, maxUsage=0.5):
-    pynvml.nvmlInit()
-    handle = pynvml.nvmlDeviceGetHandleByIndex(gpuIDX)
-    meminfo = pynvml.nvmlDeviceGetMemoryInfo(handle)
-    print("%s: %0.1f MB free, %0.1f MB used, %0.1f MB total" % (
-        pynvml.nvmlDeviceGetName(handle),
-        meminfo.free/1024.**2, meminfo.used/1024.**2, meminfo.total/1024.**2))
-    if( meminfo.free / meminfo.total < maxUsage):
-        pynvml.nvmlShutdown()
-        print("available  %0.2f" % ((meminfo.free / meminfo.total) * 100) ) 
-        return False
-        
-    pynvml.nvmlShutdown()
-    return True
-    
-
-def step_decay_learning_rate(base_lr, decay_every, current_epoch, is_exponential=False):
-    
-    if(is_exponential):
-        _exp = current_epoch // decay_every 
-        
-        if(_exp == 0 ):
-            e= 0
-        else:
-            e = _exp #current_epoch // ( decay_every * _exp )
-        
-    else:
-        e = current_epoch // decay_every
-    
-    return base_lr * ( 1 / ( math.pow(10, e) ) )
 
 
 def create_reset_metric(metric, scope='reset_metrics', **metric_args):
@@ -116,20 +79,9 @@ def create_border(images):
     3
     ], dtype=np.uint8) * 255 
     
+
 def idx_to_rgb(mask, num_classes=21):
-    
-    '''
-       """ grayscale labels to RGB-color encoding """
-    arr_3d = np.zeros((arr_2d.shape[0], arr_2d.shape[1], 3), dtype=np.uint8)
 
-    for c, i in palette.items():
-        m = arr_2d == c
-        arr_3d[m] = i
-
-    return arr_3d
-    '''
-    
-    #print mask.shape
     return_arr = np.ones([mask.shape[0],mask.shape[1],3], dtype=np.uint8)*255
     #print return_arr.shape
     for i in range(num_classes):
@@ -250,21 +202,6 @@ def loss_IoU( y_pred, y_true, number_of_class ):
         (intersection of prediction & grount truth)
         -------------------------------
         (union of prediction & ground truth)
-    '''
-    
-    """Returns a (approx) IOU score
-    intesection = y_pred.flatten() * y_true.flatten()
-    Then, IOU = 2 * intersection / (y_pred.sum() + y_true.sum() + 1e-7) + 1e-7
-    Args:
-        y_pred (4-D array): (N, H, W, 1)
-        y_true (4-D array): (N, H, W, 1)
-    Returns:
-        float: IOU score
-    """
-    '''
-    Output from SoftMax
-    logits is output with shape [batch_size x img h x img w x 1] 
-    and represents probability of class 1
     '''
     
     y_true = tf.cast(y_true, tf.float32)

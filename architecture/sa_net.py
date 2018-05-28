@@ -1,7 +1,7 @@
 '''
-The architecture of ResNet is from ry/tensorflow-resnet https://github.com/ry/tensorflow-resnet
-The function of FCN is from MarvinTeichmann/tensorflow-fcn https://github.com/MarvinTeichmann/tensorflow-fcn
+The initial code was taken from https://github.com/wkcn/resnet-fcn.tensorflow
 '''
+
 import tensorflow as tf
 from tensorflow.python.ops import control_flow_ops
 from tensorflow.python.training import moving_averages
@@ -20,12 +20,9 @@ CONV_WEIGHT_DECAY = 0.00004
 CONV_WEIGHT_STDDEV = 0.1
 FC_WEIGHT_DECAY = 0.00004
 FC_WEIGHT_STDDEV = 0.01
+
 RESNET_VARIABLES = 'resnet_variables'
-UPDATE_OPS_COLLECTION = 'resnet_update_ops'  # must be grouped with training op
-
-
-tf.app.flags.DEFINE_integer('input_size', 224, "input image size")
-
+UPDATE_OPS_COLLECTION = 'sa_net_update_ops'  # must be grouped with training op
 
 activation = tf.nn.relu
 
@@ -36,27 +33,26 @@ def inference(x, is_training,
               use_bias=False, # defaults to using batch norm
               bottleneck=True):
     
-    NumberOfResblock= sum(num_blocks) # Resnet 152 
+    NumberOfResblock= sum(num_blocks) # Calculate type of resnet and number of blocks
     
     input_x = x
     c = Config()
-    c['bottleneck'] = bottleneck
-    
-    c['is_atrous_block'] = False
-    
-    c['decay_rate'] = 0.5 
+
+    c['bottleneck'] = bottleneck #Type of residual layer
+    c['decay_rate'] = 0.5 # Survival probability
+    c['is_atrous_block'] = False # Initiallly using Conv block 
     c['is_training'] = is_training 
     c['ksize'] = 3
     c['stride'] = 1
     c['use_bias'] = use_bias
     c['num_blocks'] = num_blocks
     c['stack_stride'] = 2
-    c['NumberOfResblock'] = sum(num_blocks)
+    c['NumberOfResblock'] = sum(num_blocks) 
+    c['dilation'] = 2     
 
-    c['dilation'] = 2
-    
-    c['scope'] = 'conv1'
-        
+
+    #CBR Blocks
+    c['scope'] = 'conv1'         
     c['conv_filters_out'] = 64
     c['ksize'] = 7
     c['stride'] = 2
@@ -66,18 +62,13 @@ def inference(x, is_training,
         x = bn(x, c)
         x = activation(x)
     scale1 = x
-
     c['_current_block'] = 1  
-    
-    #with tf.variable_scope('scale2'):
-    
     with tf.variable_scope('pool1'):
         x = _max_pool(x, ksize=3, stride=2) 
         
-    print(x.get_shape())
     
     
-    
+    #Mainblock 1
     c['currentScope'] = 2
     c['num_blocks'] = num_blocks[0]
     c['stack_stride'] = 1
@@ -85,25 +76,25 @@ def inference(x, is_training,
     x = stack(x, c)
     scale2 = x
 
-    #with tf.variable_scope('scale3'):
+
+
+    #Mainblock 2
     c['currentScope'] = 3
     c['num_blocks'] = num_blocks[1]
     c['block_filters_internal'] = 128
-    #assert c['stack_stride'] == 2
     x = stack(x, c)
     scale3 = x
 
     
-    
+    #Mainblock 3
     c['is_atrous_block'] = True
-    #with tf.variable_scope('scale4'):
     c['currentScope'] = 4
     c['num_blocks'] = num_blocks[2]
     c['block_filters_internal'] = 256
     x = stack(x, c)
     scale4 = x
 
-    #with tf.variable_scope('scale5'):
+    #Mainblock 4
     c['dilation'] = 4
     c['currentScope'] = 5
     c['num_blocks'] = num_blocks[3]
@@ -114,23 +105,12 @@ def inference(x, is_training,
 
     with tf.variable_scope('scale_fcn'):
         
-        
         upscore5 = upscore_layer(scale5, shape = tf.shape(scale2), num_classes = num_classes, name = "upscore5", ksize = 4, stride = 2) 
-        
         upscore4 = upscore_layer(scale4, shape = tf.shape(scale2), num_classes = num_classes, name = "upscore4", ksize = 4, stride = 2) 
-        
         upscore3 = upscore_layer(scale3, shape = tf.shape(scale2), num_classes = num_classes, name = "upscore3", ksize = 4, stride = 2) 
-        
-        
         score_scale2 = score_layer(scale2, "score_scale2", num_classes = num_classes)
-        
-        
         fuse_scale2 = tf.add_n( [score_scale2, upscore3, upscore4, upscore5], name='fuse_layer')
-        
-        
         upscore32 = upscore_layer(fuse_scale2, shape = tf.shape(input_x), num_classes = num_classes, name = "upscore32", ksize = 8, stride = 4) 
-        
-        
         pred_up = tf.argmax(upscore32, axis = 3)
         pred = tf.expand_dims(pred_up, dim = 3)
 
@@ -186,7 +166,6 @@ def score_layer(x, name, num_classes, stddev = 0.001):
         collection_name = tf.GraphKeys.REGULARIZATION_LOSSES
 
         if not tf.get_variable_scope().reuse:
-            print("weight_decay!!!!")
             weight_decay = tf.multiply(tf.nn.l2_loss(weights), w_decay, name='weight_loss')
             tf.add_to_collection(collection_name, weight_decay)
 
@@ -212,7 +191,7 @@ def stack(x, c):
         c['_blockLocation'] = n
         
         i = c['_current_block']
-        survival =linearDecay(i , 0.5 , c['NumberOfResblock'])#.astype(np.float32)  
+        survival =linearDecay(i , c['decay_rate'] , c['NumberOfResblock'])#.astype(np.float32)  
         s = c['stack_stride'] if n == 0 else 1
         c['block_stride'] = s
         
@@ -241,22 +220,13 @@ def stack(x, c):
                 name = 'b'+str(n)
                 
             c['scope'] = str(c['currentScope'])+name 
-                
         
-        #with tf.variable_scope('block%d' % (n + 1)): 
-        
-        print(str(survival)+' '+ c['scope'],x.get_shape())
-
 
         c = defineWeight(prev_depth, c)
 
         shortcut = x  # branch 1
 
 
-        # Note: filters_out isn't how many filters are outputed. 
-        # That is the case when bottleneck=False but when bottleneck is 
-        # True, filters_internal*4 filters are outputted. filters_internal is how many filters
-        # the 3x3 convs output internally.
         m = 4 if c['bottleneck'] else 1
         filters_out = m * c['block_filters_internal']
 
@@ -266,7 +236,6 @@ def stack(x, c):
 
         if is_shortcut:
 
-            print('open shortcut',x.get_shape())
 
             #with tf.variable_scope(c['scope']+'_branch1'):
             c['ksize'] = 1
@@ -282,10 +251,8 @@ def stack(x, c):
             with tf.variable_scope('bn'+c['scope']+'_branch1', reuse=None):
                 shortcut = bn(shortcut, c)
 
-            #print( [c['_current_block'], x.get_shape(), shortcut.get_shape()])
 
             x = activation(x + shortcut)   
-            print('end shortcut',x.get_shape())
             prev_depth = x.get_shape()[-1].value 
 
     return x
@@ -348,10 +315,6 @@ def defineWeight(prev_depth, c):
     
     filters_in = prev_depth
 
-    # Note: filters_out isn't how many filters are outputed. 
-    # That is the case when bottleneck=False but when bottleneck is 
-    # True, filters_internal*4 filters are outputted. filters_internal is how many filters
-    # the 3x3 convs output internally.
     m = 4 if c['bottleneck'] else 1
     filters_out = m * c['block_filters_internal']
     
@@ -490,10 +453,6 @@ def atrous(x, c):
 def atrous_block(x, c):
     filters_in = x.get_shape()[-1]
 
-    # Note: filters_out isn't how many filters are outputed. 
-    # That is the case when bottleneck=False but when bottleneck is 
-    # True, filters_internal*4 filters are outputted. filters_internal is how many filters
-    # the 3x3 convs output internally.
     m = 4 if c['bottleneck'] else 1
     filters_out = m * c['block_filters_internal']
     
@@ -502,9 +461,6 @@ def atrous_block(x, c):
 
     c['ksize'] = 1
     c['stride'] = c['block_stride']
-
-    #if( filters_out != filters_in or c['block_stride'] != 1 ): # Reduce dimension
-     #   c['stride'] = 2
 
     if( ( filters_out != filters_in or c['block_stride'] != 1  ) and c['_blockLocation'] == 0 and  c['currentScope']> 2 ):
         c['stride'] = 2
@@ -538,10 +494,6 @@ def atrous_block(x, c):
 def block(x, c):
     filters_in = x.get_shape()[-1]
 
-    # Note: filters_out isn't how many filters are outputed. 
-    # That is the case when bottleneck=False but when bottleneck is 
-    # True, filters_internal*4 filters are outputted. filters_internal is how many filters
-    # the 3x3 convs output internally.
     m = 4 if c['bottleneck'] else 1
     filters_out = m * c['block_filters_internal']
     
@@ -550,9 +502,6 @@ def block(x, c):
 
     c['ksize'] = 1
     c['stride'] = c['block_stride']
-
-    #if( filters_out != filters_in or c['block_stride'] != 1 ): # Reduce dimension
-     #   c['stride'] = 2
 
     if( ( filters_out != filters_in or c['block_stride'] != 1  ) and c['_blockLocation'] == 0 and  c['currentScope']> 2 ):
         c['stride'] = 2
@@ -592,19 +541,14 @@ def bn(x, c):
                              initializer=tf.zeros_initializer)
         return x + bias
 
-
     axis = list(range(len(x_shape) - 1))
     
-
     
     if( c['scope'] == 'conv1' ):
-        #_name = 'conv1'
         reuse= None
     else:
-        #_name = 'res'+c['scope']
         reuse= True
         
-    #with tf.variable_scope('bn'+c['scope'], reuse=reuse) as scope:
     
     beta = _get_variable('beta',
                          params_shape,
@@ -622,7 +566,7 @@ def bn(x, c):
                                     initializer=tf.ones_initializer,
                                 trainable=False)
 
-    # These ops will only be preformed when training.
+
     mean, variance = tf.nn.moments(x, axis)
     update_moving_mean = moving_averages.assign_moving_average(moving_mean,
                                                                mean, BN_DECAY, zero_debias = False)
@@ -637,7 +581,6 @@ def bn(x, c):
         lambda: (moving_mean, moving_variance))
     
     x = tf.nn.batch_normalization(x, mean, variance, beta, gamma, BN_EPSILON)
-    #x.set_shape(inputs.get_shape()) ??
 
     return x
 
@@ -679,9 +622,6 @@ def _get_variable(name,
                            regularizer=regularizer,
                            collections=collections,
                            trainable=trainable)
-
-
-    
     
 def conv(x, c):
     ksize = c['ksize']
@@ -695,8 +635,6 @@ def conv(x, c):
     else:
         _name = 'res'+c['scope']
         reuse= True
-        
-    #with tf.variable_scope(_name, reuse=reuse) as scope:
         
     filters_in = x.get_shape()[-1].value 
     shape = [ksize, ksize, filters_in, filters_out]

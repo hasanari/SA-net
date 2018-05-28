@@ -86,13 +86,12 @@ def read_and_decode_non_image_filename(filename_queue):
     filename = features['filename_raw'] 
     image = tf.decode_raw(features['image_raw'], tf.float32)  
     segmentation = tf.decode_raw(features['mask_raw'], tf.uint8)
-    #sess = tf.InteractiveSession()
+
     image.set_shape([i_height*i_width*7])
     segmentation.set_shape([i_height*i_width*1])
 
     image = tf.reshape(image,[i_height,i_width,7])
     segmentation = tf.reshape(segmentation,[i_height,i_width])
-
 
     rgb = tf.cast(image, tf.float32)
 
@@ -112,7 +111,6 @@ def input_pipeline(filenames, batch_size, num_epochs, image_only=True, return_fi
     if(return_filename):
 
         image, label, filename = read_and_decode_non_image_filename(filename_queue)
- 
         min_after_dequeue = 10
         capacity = min_after_dequeue + 3 * batch_size
         images_batch, labels_batch, filename_batch = tf.train.shuffle_batch(

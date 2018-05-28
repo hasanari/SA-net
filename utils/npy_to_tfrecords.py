@@ -54,13 +54,12 @@ def _bytes_feature(value):
 if __name__ == '__main__':
 
     parser=argparse.ArgumentParser()
-    parser.add_argument('--outpath',help="path to write tfrecord",default="/data/ssd1TB/paper1-common/tfrecords/")
-    parser.add_argument('--rec',help="tfrecord file name to write",default="test-split")
-    parser.add_argument('--crop',help="should we crop/pad images to fixed size?",default="n")
+    parser.add_argument('--outpath',help="path to write tfrecord",default="./tfrecords/")
+    parser.add_argument('--rec',help="tfrecord file name to write",default="train")
     args=parser.parse_args()
 
     
-    train_records = read_labeled_data_list('/',  '/data/ssd1TB/paper1-common/dataset_hag_map/test.txt')
+    train_records = read_labeled_data_list('/',  'dataset_hag_map/test.txt')
     #valid_records = read_labeled_data_list('../', FLAGS.data_dir + '/val.txt')
     
     iQ=train_records[0]
