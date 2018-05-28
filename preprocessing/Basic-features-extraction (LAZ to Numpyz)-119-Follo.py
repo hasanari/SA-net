@@ -100,7 +100,8 @@ def read_laz_to_numpy( _file_ret):
     final_arr = np.zeros( (height, width, NUMBER_OF_FEATURES), dtype=np.float32 ) # Compres data to float32
 
     start_time_test = time.time()
-    for y in range(final_arr.shape[0]): # Aggregation gridded point cloud
+    # Aggregation of the gridded point cloud
+    for y in range(final_arr.shape[0]):
         for x in range(final_arr.shape[1]): 
 
             temp = np.asarray(arr[y][x])
