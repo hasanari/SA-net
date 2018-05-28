@@ -13,12 +13,8 @@ from scipy import stats
 import math
 from scipy.stats import mode
 import time
-from os.path import basename
-from tqdm import tqdm_notebook as tqdm
+from os.path import basename 
 
-import h5py
-
-import itertools
 import multiprocessing
 
 from os import listdir

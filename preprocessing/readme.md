@@ -1,8 +1,3 @@
-# SA-net : Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network
-
-## Introduction
-t.b.a
-
 ## Data Preprocessing
 
 #### Data acquisition
@@ -55,12 +50,3 @@ In order to speed up the training, we rely on tensorflow-tfrecords reader to do 
 ~~~~
 python npy_to_tfrecords.py 
 ~~~~
-
-## Installation
-t.b.a
-
-## Training
-t.b.a
-
-### Notice
-The code architecture and some of the functions were taken from https://github.com/wkcn/resnet-fcn.tensorflow
