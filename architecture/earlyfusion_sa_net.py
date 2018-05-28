@@ -1,7 +1,3 @@
-'''
-The architecture of ResNet is from ry/tensorflow-resnet https://github.com/ry/tensorflow-resnet
-The function of FCN is from MarvinTeichmann/tensorflow-fcn https://github.com/MarvinTeichmann/tensorflow-fcn
-'''
 import tensorflow as tf
 from tensorflow.python.ops import control_flow_ops
 from tensorflow.python.training import moving_averages
