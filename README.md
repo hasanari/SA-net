@@ -1,7 +1,7 @@
 ## Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network
 Created by Hasan Asy'ari Arief, Geir-Harald Strand, Håvard Tveite, and Ulf Geir Indahl from Norwegian University of Life Sciences (NMBU) and Norwegian Institute of Bioeconomy Research (NIBIO).
 
-![Earlyfusion SA-Net architecture](https://github.com/hasanari/SA-net/blob/master/images/teaser.png)
+![Earlyfusion SA-Net architecture](https://github.com/hasanari/SA-net/blob/master/images/preprocess.png)
 
 ## Citation
 If you find our work useful in your research, please consider citing:
@@ -18,6 +18,8 @@ The main contribution of our research is the development of a scalable technique
 
 In the preprocessing procedures of our work, we projected the 3D laser data to a 2D representation and used RGB, HAG, and intensity as the features of interest.
 
+![Example Result](https://github.com/hasanari/SA-net/blob/master/images/result.png)
+
 In this repository, we released reproducible code and resulting model from our work. The code consists of both the SA-Net architecture to process image only dataset and the Earlyfusion SA-Net to process multi features gridded LiDAR dataset. 
 
 ## Installation
@@ -25,13 +27,16 @@ t.b.a
 
 ## Data Preprocessing
 
+![Preprocessing procedure](https://github.com/hasanari/SA-net/blob/master/images/preprocess.png)
+
+
 #### Data acquisition
 The dataset can be downloaded from:
-the Follo 2014 for the LiDAR data (https://hoydedata.no/LaserInnsyn), and
+the Follo 2014 project for the LiDAR data (https://hoydedata.no/LaserInnsyn), and
 the Ar5 land resource dataset (https://www.nibio.no/tema/jord/arealressurser/arealressurskart-ar5).
 
 #### HAG Extraction
-Extracting Height Above Ground from LiDAR data can be implemented using https://pdal.io/. For simplicity, we recommend using their docker image
+Extracting Height Above Ground from LiDAR data can be implemented using https://pdal.io/. For simplicity, we recommend using their docker image:
 ~~~~
 docker pull pdal/pdal:1.7
 ~~~~
@@ -44,13 +49,13 @@ python hag_extraction.py
 #### 2D projection
 Library dependencies are liblas, and scipy.
 https://liblas.org/tutorial/python
-The LiDAR data can be gridded using "gridding_and_aggregation.py", by specifying the correct data source and output directory.
+The LiDAR data can be gridded using **preprocessing/gridding_and_aggregation.py**, by specifying the correct data source and output directory.
 ~~~~
 DATA_SOURCE_FOLDER = '../dataset/follo-2014/' 
 DATA_READY_DIRECTORY = '../dataset/follo-2014-gridded/'
 ~~~~
 ~~~~
-python gridding_and_aggregation.py 
+python preprocessing/gridding_and_aggregation.py 
 ~~~~
 
 #### Label extraction
@@ -65,13 +70,13 @@ We provide both offline augmentations and on-the-fly augmentation.
 
 The offline augmentations help speeding up the training process and provide the ability to combine different tiles for each batch, resulting in a better classifier but it requires more space because the augmented data are stored physically in hard-drive.
 
-Please make sure the folder location is correctly specified in augmentation.py 
+Please make sure the folder location is correctly specified in **preprocessing/augmentation.py**. 
 ~~~~
-python augmentation.py 
+python preprocessing/augmentation.py 
 ~~~~
 In order to speed up the training, we rely on tensorflow-tfrecords reader to do the parallel reading, which requires the conversion from npy file to tfrecords file.
 ~~~~
-python npy_to_tfrecords.py 
+python preprocessing/npy_to_tfrecords.py 
 ~~~~
 
 ## Training
