@@ -78,8 +78,8 @@ python preprocessing/npy_to_tfrecords.py
 
 ## Models
 
-1. Resulting model for The SA-Net architecture can be downloaded here http://bit.ly/sa-net-model-42
-2. Resulting model for The Earlyfusion SA-Net architecture can be downloaded here http://bit.ly/earlyfusion-sa-net-model-44
+1. The resulting model for the SA-Net can be downloaded here http://bit.ly/sa-net-model-42
+2. The resulting model for the Earlyfusion SA-Net can be downloaded here http://bit.ly/earlyfusion-sa-net-model-44
 
 
 ## Training
