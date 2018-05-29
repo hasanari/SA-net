@@ -11,7 +11,7 @@ If you find our work useful in your research, please consider citing:
         }
 
 ## Introduction
-This work is based on our paper *Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network*.
+This work is based on our paper **Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network**.
 
 SA-net is a deep learning architecture using atrous kernels and stochastic depth technique to address semantic segmentation problem.
 The main contribution of our research is the development of a scalable technique for doing dense-pixel prediction, incorporating image-based features and LiDAR-derived features, to update a generalized land resource map in Norway. With the aim to understand the behavior of ground-truth data constructed from different sources and with the varying resolution of the label classes, we managed to develop a deep learning architecture (the EarlyFusion SA-Net) which is not only capable of predicting generalized classes but also able to identify the less-common ones. 
@@ -41,15 +41,14 @@ Extracting Height Above Ground from LiDAR data can be implemented using https://
 docker pull pdal/pdal:1.7
 ~~~~
 More information can be found at https://pdal.io/quickstart.html#introduction.
-For multi-thread processing, hag_extraction.py can be used.
+For multi-thread processing, **hag_extraction.py** can be used.
 ~~~~
-python hag_extraction.py 
+python preprocessing/hag_extraction.py 
 ~~~~
 
 #### 2D projection
-Library dependencies are liblas, and scipy.
-https://liblas.org/tutorial/python
-The LiDAR data can be gridded using **preprocessing/gridding_and_aggregation.py**, by specifying the correct data source and output directory.
+Library dependencies are scipy and liblas (https://liblas.org/tutorial/python). 
+The LiDAR data can be gridded using **gridding_and_aggregation.py**, by specifying the correct data source and output directory.
 ~~~~
 DATA_SOURCE_FOLDER = '../dataset/follo-2014/' 
 DATA_READY_DIRECTORY = '../dataset/follo-2014-gridded/'
@@ -68,9 +67,7 @@ Once the label data and the gridded lidar data are ready, the final step is to i
 
 We provide both offline augmentations and on-the-fly augmentation.
 
-The offline augmentations help speeding up the training process and provide the ability to combine different tiles for each batch, resulting in a better classifier but it requires more space because the augmented data are stored physically in hard-drive.
-
-Please make sure the folder location is correctly specified in **preprocessing/augmentation.py**. 
+The offline augmentations help speeding up the training process and provide the ability to combine different tiles for each batch, resulting in a better classifier. However, it requires more space because the augmented data are stored physically in the hard-drive.
 ~~~~
 python preprocessing/augmentation.py 
 ~~~~
@@ -79,7 +76,16 @@ In order to speed up the training, we rely on tensorflow-tfrecords reader to do 
 python preprocessing/npy_to_tfrecords.py 
 ~~~~
 
+## Models
+
+1. Resulting model for The SA-Net architecture can be downloaded here http://bit.ly/sa-net-model-42
+2. Resulting model for The Earlyfusion SA-Net architecture can be downloaded here http://bit.ly/earlyfusion-sa-net-model-44
+
+
 ## Training
+t.b.a
+
+## Resulting Models
 t.b.a
 
 ### Notice
