@@ -27,7 +27,7 @@ t.b.a
 
 ## Data Preprocessing
 
-![Preprocessing procedure](https://github.com/hasanari/SA-net/blob/master/images/preprocess.png)
+![Preprocessing procedure](https://github.com/hasanari/SA-net/blob/master/images/preprocess.png  =220x330)
 
 
 #### Data acquisition
