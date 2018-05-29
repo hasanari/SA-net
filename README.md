@@ -1,7 +1,24 @@
-# SA-net : Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network
+## Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network
+Created by Hasan Asy'ari Arief, Geir-Harald Strand, Håvard Tveite, and Ulf Geir Indahl from Norwegian University of Life Sciences (NMBU) and Norwegian Institute of Bioeconomy Research (NIBIO).
+
+![Earlyfusion SA-Net architecture](https://github.com/hasanari/SA-net/blob/master/images/teaser.png)
+
+## Citation
+If you find our work useful in your research, please consider citing:
+
+        @article{,
+
+        }
 
 ## Introduction
-t.b.a
+This work is based on our paper *Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network*.
+
+SA-net is a deep learning architecture using atrous kernels and stochastic depth technique to address semantic segmentation problem.
+The main contribution of our research is the development of a scalable technique for doing dense-pixel prediction, incorporating image-based features and LiDAR-derived features, to update a generalized land resource map in Norway. With the aim to understand the behavior of ground-truth data constructed from different sources and with the varying resolution of the label classes, we managed to develop a deep learning architecture (the EarlyFusion SA-Net) which is not only capable of predicting generalized classes but also able to identify the less-common ones. 
+
+In the preprocessing procedures of our work, we projected the 3D laser data to a 2D representation and used RGB, HAG, and intensity as the features of interest.
+
+In this repository, we released reproducible code and resulting model from our work. The code consists of both the SA-Net architecture to process image only dataset and the Earlyfusion SA-Net to process multi features gridded LiDAR dataset. 
 
 ## Installation
 t.b.a
