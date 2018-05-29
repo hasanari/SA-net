@@ -25,6 +25,11 @@ In this repository, we released reproducible code and resulting model from our w
 ## Installation
 t.b.a
 
+## Models
+
+1. The resulting model for the SA-Net can be downloaded here http://bit.ly/sa-net-model-42
+2. The resulting model for the Earlyfusion SA-Net can be downloaded here http://bit.ly/earlyfusion-sa-net-model-44
+
 ## Data Preprocessing
 
 <img alt="Preprocessing procedure" src="https://github.com/hasanari/SA-net/blob/master/images/preprocess.png" height="220" >
@@ -75,11 +80,6 @@ In order to speed up the training, we rely on tensorflow-tfrecords reader to do 
 ~~~~
 python preprocessing/npy_to_tfrecords.py 
 ~~~~
-
-## Models
-
-1. The resulting model for the SA-Net can be downloaded here http://bit.ly/sa-net-model-42
-2. The resulting model for the Earlyfusion SA-Net can be downloaded here http://bit.ly/earlyfusion-sa-net-model-44
 
 
 ## Training
