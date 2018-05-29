@@ -1,7 +1,7 @@
 ## Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network
 Created by Hasan Asy'ari Arief, Geir-Harald Strand, Håvard Tveite, and Ulf Geir Indahl from Norwegian University of Life Sciences (NMBU) and Norwegian Institute of Bioeconomy Research (NIBIO).
 
-![Earlyfusion SA-Net architecture](https://github.com/hasanari/SA-net/blob/master/images/preprocess.png)
+![Earlyfusion SA-Net architecture](https://github.com/hasanari/SA-net/blob/master/images/teaser.png)
 
 ## Citation
 If you find our work useful in your research, please consider citing:
