@@ -79,7 +79,7 @@ python preprocessing/npy_to_tfrecords.py
 ~~~~
 
 ## Training
-- To train SA-Net from pretrained model (Downloaded):
+- To train SA-Net from pretrained model:
 ~~~~
 python train_SA-net.py --checkpoint=[PATH TO MODEL] --restore_variables=True 
 ~~~~
@@ -93,5 +93,5 @@ python train_SA-net.py --restore_variables=False
 - To train Earlyfusion SA-Net, just replace **train_SA-net.py** with **train_earlyfusion_SA-Net.py** from the command above, you can also add **--help** to find additional options you may need.
 
 
-**Acknowledgement** 
+#### Acknowledgement 
 The code architecture and some of the functions were taken from https://github.com/wkcn/resnet-fcn.tensorflow
