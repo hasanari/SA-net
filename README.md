@@ -22,9 +22,6 @@ In the preprocessing procedures of our work, we projected the 3D laser data to a
 
 In this repository, we released reproducible code and resulting model from our work. The code consists of both the SA-Net architecture to process image only dataset and the Earlyfusion SA-Net to process multi features gridded LiDAR dataset. 
 
-## Installation
-t.b.a
-
 ## Models
 
 1. The resulting model for the SA-Net can be downloaded here http://bit.ly/sa-net-model-42
@@ -81,12 +78,20 @@ In order to speed up the training, we rely on tensorflow-tfrecords reader to do 
 python preprocessing/npy_to_tfrecords.py 
 ~~~~
 
-
 ## Training
-t.b.a
+- To train SA-Net from pretrained model (Downloaded):
+~~~~
+python train_SA-net.py --checkpoint=[PATH TO MODEL] --restore_variables=True 
+~~~~
 
-## Resulting Models
-t.b.a
 
-### Notice
+- To train SA-Net from scratch:
+~~~~
+python train_SA-net.py --restore_variables=False 
+~~~~
+
+- To train Earlyfusion SA-Net, just replace **train_SA-net.py** with **train_earlyfusion_SA-Net.py** from the command above, you can also add **--help** to find additional options you may need.
+
+
+**Acknowledgement** 
 The code architecture and some of the functions were taken from https://github.com/wkcn/resnet-fcn.tensorflow

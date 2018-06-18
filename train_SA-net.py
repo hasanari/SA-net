@@ -22,11 +22,9 @@ val_record = "./tfrecords/val.tfrecords"
 
 IMG_MEAN = np.array((0,0,0), dtype=np.float32) # Not be used
 
-CHECKPOINT_FN = "./deeplab_resnet.ckpt"
 EPOCH_INIT = 0 
 TOTAL_TRAINING_DATA = 57036
 
-restore_variables = False # Train from scratch 
 IGNORE_LABEL = 0
 NUM_CLASSES = num_classes = 8
 MOMENTUM = 0.9
@@ -43,6 +41,14 @@ tf.app.flags.DEFINE_integer('max_epoch', 50, "max epoch")
 tf.app.flags.DEFINE_integer('gpuIDX', 99, "GPU ID")
 
 
+tf.app.flags.DEFINE_integer('restore_variables', False, "Is the pretrained model available?")
+tf.app.flags.DEFINE_integer('checkpoint', "./deeplab_resnet.ckpt", "Model Location")
+
+
+
+restore_variables = FLAGS.checkpoint 
+
+CHECKPOINT_FN = FLAGS.checkpoint #Checkpoint location
 
 test_batch_size = 10
 batch_size = FLAGS.batch_size
