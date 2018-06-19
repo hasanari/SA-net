@@ -7,12 +7,15 @@ Created by <a href="https://linkedin.com/in/hasanasyariarief/">Hasan Asy'ari Ari
 If you find our work useful in your research, please consider citing:
 
 - **MDPI and ACS Style**
+
 Arief, H.A.; Strand, G.-H.; Tveite, H.; Indahl, U.G. Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network. Remote Sens. 2018, 10, 973.
 
 - **AMA Style**
+
 Arief HA, Strand G-H, Tveite H, Indahl UG. Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network. Remote Sensing. 2018; 10(6):973.
 
 - **Chicago/Turabian Style**
+
 Arief, Hasan A.; Strand, Geir-Harald; Tveite, Håvard; Indahl, Ulf G. 2018. "Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network." Remote Sens. 10, no. 6: 973.
 
 ## Introduction
