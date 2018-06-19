@@ -1,20 +1,28 @@
 ## Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network
-Created by Hasan Asy'ari Arief, Geir-Harald Strand, Håvard Tveite, and Ulf Geir Indahl from Norwegian University of Life Sciences (NMBU) and Norwegian Institute of Bioeconomy Research (NIBIO).
+Created by <a href="https://linkedin.com/in/hasanasyariarief/">Hasan Asy'ari Arief</a>, Geir-Harald Strand, Håvard Tveite, and Ulf Geir Indahl from Norwegian University of Life Sciences (NMBU) and Norwegian Institute of Bioeconomy Research (NIBIO).
 
 ![Earlyfusion SA-Net architecture](https://github.com/hasanari/SA-net/blob/master/images/teaser.png)
 
 ## Citation
 If you find our work useful in your research, please consider citing:
 
-        @article{,
+- **MDPI and ACS Style**
+Arief, H.A.; Strand, G.-H.; Tveite, H.; Indahl, U.G. Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network. Remote Sens. 2018, 10, 973.
 
-        }
+- **AMA Style**
+Arief HA, Strand G-H, Tveite H, Indahl UG. Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network. Remote Sensing. 2018; 10(6):973.
+
+- **Chicago/Turabian Style**
+Arief, Hasan A.; Strand, Geir-Harald; Tveite, Håvard; Indahl, Ulf G. 2018. "Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network." Remote Sens. 10, no. 6: 973.
 
 ## Introduction
-This work is based on our paper **Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network**.
+This work is based on our paper <a href="http://www.mdpi.com/2072-4292/10/6/973">Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network</a>.
 
 SA-net is a deep learning architecture using atrous kernels and stochastic depth technique to address semantic segmentation problem.
+
 The main contribution of our research is the development of a scalable technique for doing dense-pixel prediction, incorporating image-based features and LiDAR-derived features, to update a generalized land resource map in Norway. With the aim to understand the behavior of ground-truth data constructed from different sources and with the varying resolution of the label classes, we managed to develop a deep learning architecture (the EarlyFusion SA-Net) which is not only capable of predicting generalized classes but also able to identify the less-common ones. 
+
+In a benchmark study carried out using the Follo 2014 LiDAR data and the NIBIO AR5 land resources dataset, we compare our proposals to other deep learning architectures. A quantitative comparison shows that our best proposal provides more than **5%** relative improvement in terms of mean intersection-over-union over the atrous network.
 
 In the preprocessing procedures of our work, we projected the 3D laser data to a 2D representation and used RGB, HAG, and intensity as the features of interest.
 
@@ -78,7 +86,7 @@ In order to speed up the training, we rely on tensorflow-tfrecords reader to do 
 python preprocessing/npy_to_tfrecords.py 
 ~~~~
 
-## Training
+## Usage
 - To train SA-Net from pretrained model:
 ~~~~
 python train_SA-net.py --checkpoint=[PATH TO MODEL] --restore_variables=True 
@@ -90,7 +98,7 @@ python train_SA-net.py --checkpoint=[PATH TO MODEL] --restore_variables=True
 python train_SA-net.py --restore_variables=False 
 ~~~~
 
-- To train Earlyfusion SA-Net, just replace **train_SA-net.py** with **train_earlyfusion_SA-Net.py** from the command above, you can also add **--help** to find additional options you may need.
+- To train Earlyfusion SA-Net, replace **train_SA-net.py** with **train_earlyfusion_SA-Net.py** from the command above, you can also add **--help** to find additional options you may need.
 
 
 #### Acknowledgement 
