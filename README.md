@@ -19,23 +19,17 @@ Arief HA, Strand G-H, Tveite H, Indahl UG. Land Cover Segmentation of Airborne L
 Arief, Hasan A.; Strand, Geir-Harald; Tveite, Håvard; Indahl, Ulf G. 2018. "Land Cover Segmentation of Airborne LiDAR Data Using Stochastic Atrous Network." Remote Sens. 10, no. 6: 973.
 
 ## Introduction
-<div style="text-align: justify;">
+
 This work is based on our paper <a href="http://www.mdpi.com/2072-4292/10/6/973">Land Cover Segmentation of Airborne LiDAR Data using Stochastic Atrous Network</a>.
 
-SA-net is a deep learning architecture using atrous kernels and stochastic depth technique to address semantic segmentation problem.
-</div>
+- SA-net is a deep learning architecture using atrous kernels and stochastic depth technique to address semantic segmentation problem.
 
-<div style="text-align: justify;">
-The main contribution of our research is the development of a scalable technique for doing dense-pixel prediction, incorporating image-based features and LiDAR-derived features, to update a generalized land resource map in Norway. With the aim to understand the behavior of ground-truth data constructed from different sources and with the varying resolution of the label classes, we managed to develop a deep learning architecture (the EarlyFusion SA-Net) which is not only capable of predicting generalized classes but also able to identify the less-common ones. 
-</div>
+- The main contribution of our research is the development of a scalable technique for doing dense-pixel prediction, incorporating image-based features and LiDAR-derived features, to update a generalized land resource map in Norway. With the aim to understand the behavior of ground-truth data constructed from different sources and with the varying resolution of the label classes, we managed to develop a deep learning architecture (the EarlyFusion SA-Net) which is not only capable of predicting generalized classes but also able to identify the less-common ones. 
 
-<div style="text-align: justify;">
-In a benchmark study carried out using the Follo 2014 LiDAR data and the NIBIO AR5 land resources dataset, we compare our proposals to other deep learning architectures. A quantitative comparison shows that our best proposal provides more than **5%** relative improvement in terms of mean intersection-over-union over the atrous network.
-</div>
+- In a benchmark study carried out using the Follo 2014 LiDAR data and the NIBIO AR5 land resources dataset, we compare our proposals to other deep learning architectures. A quantitative comparison shows that our best proposal provides more than **5%** relative improvement in terms of mean intersection-over-union over the atrous network.
 
-<div style="text-align: justify;">
-In the preprocessing procedures of our work, we projected the 3D laser data to a 2D representation and used RGB, HAG, and intensity as the features of interest.
-</div>
+- In the preprocessing procedures of our work, we projected the 3D laser data to a 2D representation and used RGB, HAG, and intensity as the features of interest.
+
 
 ![Example Result](https://github.com/hasanari/SA-net/blob/master/images/result.png)
 
